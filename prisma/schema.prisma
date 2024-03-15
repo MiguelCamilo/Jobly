@@ -32,5 +32,5 @@ model Job {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  @@map("jobs")
+  @@map("jobs") // gives the table name in db a name of "jobs". Different from the model name
 }

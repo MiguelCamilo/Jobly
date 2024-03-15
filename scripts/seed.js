@@ -1,4 +1,4 @@
-const { placeholderJobs } = require("./mock-data");
+const { placeholderJobs } = require("./data/mock-data");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
