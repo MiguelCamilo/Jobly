@@ -2,7 +2,7 @@ const { placeholderJobs } = require("./mock-data");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-async function seedMockDataToDB() {
+async function main() {
   await Promise.all(
     placeholderJobs.map(async (job) => {
       await prisma.job.upsert({
@@ -16,7 +16,7 @@ async function seedMockDataToDB() {
   );
 }
 
-seedMockDataToDB()
+main()
   .then(async () => {
     await prisma.$disconnect();
   })
