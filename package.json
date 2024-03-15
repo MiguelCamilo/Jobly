@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky",
-    "lint:staged": "lint-staged"
+    "lint:staged": "lint-staged",
+    "seed": "node scripts/seed.js"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": "eslint"
