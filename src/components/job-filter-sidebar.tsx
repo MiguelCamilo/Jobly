@@ -1,10 +1,20 @@
 import filterJobs from "../../actions/filter-jobs";
+import findAllJobLocations from '../../actions/find-all-locations';
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Select from '@/components/ui/select';
 
-const JobFilterSidebar = () => {
+const JobFilterSidebar = async () => {
+
+  const jobLocations = ( await findAllJobLocations()
+    .then((locations) =>
+      // takes the location out of each object then 
+      // turns it into an array of strings and by using 
+      // .filter(Boolean) it removes any null values
+      locations.map(({ location }) => location).filter(Boolean)
+    )) as string[]; // using type assertion to tell typescript that this is a string array
+  
   return (
     // h-fit onlys makes the the height fit the content
     <aside className="sticky top-0 h-fit rounded-lg bg-background md:w-[260px] p-4">
@@ -27,8 +37,13 @@ const JobFilterSidebar = () => {
             <Select
               id='location'
               name='location'
+              defaultValue=""
             >
-
+              <option
+                value=""
+              >
+                All Locations
+              </option>
             </Select>        
           </div>
         </div>
