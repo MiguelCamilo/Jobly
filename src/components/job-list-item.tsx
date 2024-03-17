@@ -25,7 +25,7 @@ const JobListeItem = ({
   },
 }: JobListeItemProps) => {
   return (
-    <article className="flex gap-3 rounded-lg border p-5 hover:bg-muted/60">
+    <article className="flex gap-3 rounded-lg border p-5 hover:bg-muted/60 hover:cursor-pointer">
       <Image
         src={companyLogoUrl || companyLogoPlaceholder}
         alt={`${companyName} logo`}
