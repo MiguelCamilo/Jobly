@@ -9,10 +9,9 @@ import { Input } from "@/components/ui/input";
 import Select from "@/components/ui/select";
 
 const JobFilterSidebar = async () => {
+  // TODO: use useForm hook from react-hook-form to handle form state and make this a client component
   const jobLocations = (await findAllJobLocations().then((locations) =>
-    // takes the location out of each object then
-    // turns it into an array of strings and by using
-    // .filter(Boolean) it removes any null values
+    // takes the location out of each object then turns it into an array of strings and by using .filter(Boolean) it removes any null values
     locations.map(({ location }) => location).filter(Boolean),
   )) as string[]; // using type assertion to tell typescript that this is a string array
 
@@ -62,14 +61,23 @@ const JobFilterSidebar = async () => {
             />
             <Label htmlFor="remote">Remote Jobs</Label>
           </div>
-        <Button 
-          type="submit"
-          variant={"default"}
-          size={"icon"}
-          className='w-full'
-        >
-          Apply Filters
-        </Button>
+          <Button
+            type="submit"
+            variant={"default"}
+            size={"icon"}
+            className="w-full"
+          >
+            Apply Filters
+          </Button>
+          <Button
+            type="button"
+            variant={"destructive"}
+            size={"icon"}
+            className="w-full"
+            // onClick={clearForm}
+          >
+            Clear Filters
+          </Button>
         </div>
       </form>
     </aside>

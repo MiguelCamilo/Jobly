@@ -1,11 +1,28 @@
-import findApprovedJobs from "../../actions/find-approved-jobs";
+import { IJobFilterValuesSchema } from "@/lib/schemas/validation";
 
-import JobListeItem from "@/components/job-list-item";
-import JobFilterSidebar from '@/components/job-filter-sidebar';
+import JobFilterSidebar from "@/components/job-filter-sidebar";
+import JobResults from "@/components/job-results";
 
-export default async function Home() {
-  const jobs = await findApprovedJobs();
+interface PageProps {
+  searchParams: {
+    query?: string;
+    type?: string;
+    location?: string;
+    remote?: string;
+  };
+}
 
+export default async function Home({
+  searchParams: { query, type, location, remote },
+}: PageProps) {
+
+  const filterValues: IJobFilterValuesSchema = {
+    query,
+    type,
+    location,
+    remote: remote === "true",
+  };
+  
   return (
     <main className="m-auto my-10 max-w-5xl space-y-10 px-3">
       <div className="space-y-5 text-center">
@@ -17,15 +34,10 @@ export default async function Home() {
         </p>
       </div>
 
-      <section className='flex flex-col md:flex-row gap-4'>
+      <section className="flex flex-col gap-4 md:flex-row">
         <JobFilterSidebar />
-        <div className="space-y-4 grow">
-          {jobs.map((jobs) => (
-            <JobListeItem key={jobs.id} job={jobs} />
-          ))}
-        </div>
+        <JobResults filterValues={filterValues} />
       </section>
     </main>
   );
 }
-// all nextjs components are server components by default
