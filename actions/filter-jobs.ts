@@ -1,12 +1,19 @@
 'use server'
 
-import { jobFilterSchema } from '@/lib/schemas/validation';
+import * as z from 'zod';
+
+import { JobFilterSchema } from '@/lib/schemas/validation';
 import { redirect } from 'next/navigation';
 
-export default async function filterJobs(formData: FormData) {
-    const values = Object.fromEntries(formData.entries()); // returns an object created by key-value
+export default async function filterJobs(values: z.infer<typeof JobFilterSchema>) {
 
-    const { query, type, location, remote } = jobFilterSchema.parse(values);
+    const validatedFields = JobFilterSchema.safeParse(values);
+
+    if (!validatedFields.success) {
+        return { error: validatedFields.error };
+    }
+
+    const { query, type, location, remote } = validatedFields.data;
 
     const searchParams = new URLSearchParams({
         ...(query && { query: query.trim() }), // if query is defined then add it to the searchParams
@@ -15,7 +22,7 @@ export default async function filterJobs(formData: FormData) {
         ...(remote && { remote: "true" }), 
     });
 
-    redirect(`/?${searchParams.toString()}`)
+    return redirect(`/?${searchParams.toString()}`)
 }
 
 

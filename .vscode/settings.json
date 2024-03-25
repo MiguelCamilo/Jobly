@@ -1,3 +1,7 @@
 {
-    "github.copilot.chat.terminalChatLocation": "quickChat"
+    "github.copilot.chat.terminalChatLocation": "quickChat",
+    "editor.tokenColorCustomizations": {
+        "comments": "",
+        "textMateRules": []
+    }
 }
