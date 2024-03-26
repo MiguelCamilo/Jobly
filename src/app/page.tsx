@@ -1,4 +1,4 @@
-import { IJobFilterValuesSchema } from "@/lib/schemas/validation";
+import { JobFilterValues } from "@/lib/schemas/validation";
 
 import JobFilterSidebar from "@/components/job-filter-sidebar";
 import JobResults from "@/components/job-results";
@@ -16,7 +16,7 @@ export default async function Home({
   searchParams: { query, type, location, remote },
 }: PageProps) {
 
-  const filterValues: IJobFilterValuesSchema = {
+  const filterValues: JobFilterValues = {
     query,
     type,
     location,
@@ -35,7 +35,7 @@ export default async function Home({
       </div>
 
       <section className="flex flex-col gap-4 md:flex-row">
-        <JobFilterSidebar />
+        <JobFilterSidebar defaultValues={filterValues} />
         <JobResults filterValues={filterValues} />
       </section>
     </main>
