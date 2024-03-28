@@ -14,7 +14,6 @@ import { JOB_TYPES } from "@/lib/constants/job-types";
 import { JobFilterValues, JobFilterSchema } from "@/lib/schemas/validation";
 
 import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
 import { Button } from "./ui/button";
 import { Input } from "@/components/ui/input";
 import Select from "@/components/ui/select";
@@ -26,10 +25,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { FormError } from "./form-error";
+import { FormError } from "@/components/form-error";
+import LoadingButtonText from "@/components/ui/loading-button-text";
 
 interface JobFilterSidebarProps {
-  defaultValues: JobFilterValues
+  defaultValues: JobFilterValues;
 }
 
 const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
@@ -37,17 +37,17 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
   const [jobLocations, setJobLocations] = React.useState<string[]>([]);
   const [error, setError] = React.useState<ZodError>();
 
-  const router = useRouter();    
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof JobFilterSchema>>({
     resolver: zodResolver(JobFilterSchema),
     defaultValues: {
-      query: defaultValues?.query,
+      query: defaultValues?.query || '',
       type: defaultValues?.type,
       location: defaultValues?.location,
       remote: defaultValues?.remote, // TODO: fix: value is not being passed to the url params
     },
-  });  
+  });
 
   const onFilterSubmit = (values: z.infer<typeof JobFilterSchema>) => {
     startTransition(() => {
@@ -93,9 +93,10 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
                     <FormLabel htmlFor="query">Search</FormLabel>
                     <FormControl>
                       <Input
-                        {...field}
                         id="query"
                         placeholder="Title, company, etc..."
+                        {...field}
+                        value={field.value}           
                         disabled={isPending}
                       />
                     </FormControl>
@@ -112,7 +113,7 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
                   <FormItem>
                     <FormLabel htmlFor="type">Type</FormLabel>
                     <FormControl>
-                      <Select id="type" {...field}>
+                      <Select disabled={isPending} id="type" {...field}>
                         <option value="">All Types</option>
                         {JOB_TYPES.map((types) => (
                           <option key={types} value={types}>
@@ -134,7 +135,7 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
                   <FormItem>
                     <FormLabel htmlFor="location">Location</FormLabel>
                     <FormControl>
-                      <Select id="location" {...field}>
+                      <Select id="location" disabled={isPending} {...field}>
                         <option value="">All Locations</option>
                         {jobLocations.map((location) => (
                           <option key={location} value={location}>
@@ -160,6 +161,7 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
                         className="mr-2 scale-125 accent-black"
                         {...field}
                         value={String(field.value)}
+                        disabled={isPending}
                       />
                     </FormControl>
                     <FormLabel htmlFor="remote">Remote Jobs</FormLabel>
@@ -172,14 +174,18 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
               variant={"default"}
               size={"icon"}
               className="w-full"
+              disabled={isPending}
             >
-              Apply Filters
+              <LoadingButtonText isPending={isPending} className="">
+                Apply Filters
+              </LoadingButtonText>
             </Button>
             <Button
               type="button"
               variant={"destructive"}
               size={"icon"}
               className="w-full"
+              disabled={isPending}
               onClick={clearFilters}
             >
               Clear Filters
