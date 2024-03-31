@@ -33,21 +33,22 @@ interface JobFilterSidebarProps {
 }
 
 const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
+  const router = useRouter();
+
   const [isPending, startTransition] = React.useTransition();
   const [jobLocations, setJobLocations] = React.useState<string[]>([]);
   const [error, setError] = React.useState<ZodError>();
 
-  const router = useRouter();
-
-  const form = useForm<z.infer<typeof JobFilterSchema>>({
+  const {watch, ...form} = useForm<z.infer<typeof JobFilterSchema>>({
     resolver: zodResolver(JobFilterSchema),
     defaultValues: {
-      query: defaultValues?.query || '',
+      query: defaultValues?.query || "",
       type: defaultValues?.type,
       location: defaultValues?.location,
       remote: defaultValues?.remote, // TODO: fix: value is not being passed to the url params
     },
   });
+  
 
   const onFilterSubmit = (values: z.infer<typeof JobFilterSchema>) => {
     startTransition(() => {
@@ -61,11 +62,6 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
     });
   };
 
-  const clearFilters = () => {
-    form.reset();
-    router.replace("/");
-  };
-
   React.useEffect(() => {
     const fetchJobLocations = async () => {
       const locations = await findAllJobLocations();
@@ -77,10 +73,13 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
     fetchJobLocations();
   }, []);
 
+  const formValues = watch();
+  const hasValues = Object.values(formValues).some((value) => value);
+  
   return (
     // h-fit onlys makes the the height fit the content
     <aside className="sticky top-0 h-fit rounded-lg bg-background p-4 md:w-[260px]">
-      <Form {...form}>
+      <Form {...form} watch={watch}>
         <form onSubmit={form.handleSubmit(onFilterSubmit)}>
           <FormError message={error?.message} />
           <div className="space-y-4">
@@ -96,7 +95,7 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
                         id="query"
                         placeholder="Title, company, etc..."
                         {...field}
-                        value={field.value}           
+                        value={field.value}
                         disabled={isPending}
                       />
                     </FormControl>
@@ -176,20 +175,25 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
               className="w-full"
               disabled={isPending}
             >
-              <LoadingButtonText isPending={isPending} className="">
+              <LoadingButtonText isPending={isPending}>
                 Apply Filters
               </LoadingButtonText>
             </Button>
-            <Button
-              type="button"
-              variant={"destructive"}
-              size={"icon"}
-              className="w-full"
-              disabled={isPending}
-              onClick={clearFilters}
-            >
-              Clear Filters
-            </Button>
+            {hasValues && (
+              <Button
+                type="button"
+                variant={"destructive"}
+                size={"icon"}
+                className="w-full"
+                disabled={isPending}
+                onClick={() => {
+                  form.reset();
+                  router.replace("/");
+                }}
+              >
+                Clear Filters
+              </Button>
+            )}
           </div>
         </form>
       </Form>

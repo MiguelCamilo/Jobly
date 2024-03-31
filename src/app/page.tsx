@@ -1,7 +1,7 @@
 import { JobFilterValues } from "@/lib/schemas/validation";
 
-import JobFilterSidebar from "@/components/job-filter-sidebar";
 import JobResults from "@/components/job-results";
+import JobFilterSidebar from "@/components/job-filter-sidebar";
 
 interface PageProps {
   searchParams: {

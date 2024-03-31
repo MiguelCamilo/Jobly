@@ -4,7 +4,7 @@ import { ClipLoader } from 'react-spinners';
 
 interface ILoadingButtonText {
     isPending: boolean;
-    className: string;
+    className?: string;
     children?: string;
 }
 

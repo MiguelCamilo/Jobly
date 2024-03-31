@@ -15,10 +15,7 @@ export default async function findApprovedJobs({
   const { query, type, location, remote } = filterValues;
 
   // takes a two seperate words and combines them with a & symbol. Ex: "Frontend Developer" => "Frontend & Developer"
-  const searchString = query
-    ?.split(" ")
-    .filter((word) => word.length > 0)
-    .join(" & ");
+  const searchString = query?.split(" ").filter((word) => word.length > 0).join(" & ");
 
   const searchFilter: Prisma.JobWhereInput = searchString
     ? {
