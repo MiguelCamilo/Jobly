@@ -16,7 +16,14 @@ import { JobFilterValues, JobFilterSchema } from "@/lib/schemas/validation";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "./ui/button";
 import { Input } from "@/components/ui/input";
-import Select from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import {
   Form,
   FormControl,
@@ -39,16 +46,15 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
   const [jobLocations, setJobLocations] = React.useState<string[]>([]);
   const [error, setError] = React.useState<ZodError>();
 
-  const {watch, ...form} = useForm<z.infer<typeof JobFilterSchema>>({
+  const { watch, ...form } = useForm<z.infer<typeof JobFilterSchema>>({
     resolver: zodResolver(JobFilterSchema),
     defaultValues: {
       query: defaultValues?.query || "",
-      type: defaultValues?.type,
-      location: defaultValues?.location,
+      type: defaultValues?.type || "",
+      location: defaultValues?.location || "",
       remote: defaultValues?.remote, // TODO: fix: value is not being passed to the url params
     },
   });
-  
 
   const onFilterSubmit = (values: z.infer<typeof JobFilterSchema>) => {
     startTransition(() => {
@@ -75,12 +81,13 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
 
   const formValues = watch();
   const hasValues = Object.values(formValues).some((value) => value);
-  
+
   return (
     // h-fit onlys makes the the height fit the content
     <aside className="sticky top-0 h-fit rounded-lg bg-background p-4 md:w-[260px]">
       <Form {...form} watch={watch}>
-        <form onSubmit={form.handleSubmit(onFilterSubmit)}>
+        {/* key attribute updates react anytime defaultValue changes and re-renders this component with the new data */}
+        <form onSubmit={form.handleSubmit(onFilterSubmit)} key={JSON.stringify(defaultValues)}>
           <FormError message={error?.message} />
           <div className="space-y-4">
             <div className="flex flex-col gap-2">
@@ -95,7 +102,6 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
                         id="query"
                         placeholder="Title, company, etc..."
                         {...field}
-                        value={field.value}
                         disabled={isPending}
                       />
                     </FormControl>
@@ -111,16 +117,25 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel htmlFor="type">Type</FormLabel>
-                    <FormControl>
-                      <Select disabled={isPending} id="type" {...field}>
-                        <option value="">All Types</option>
+                    <Select
+                      disabled={isPending}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a job type" />
+                        </SelectTrigger>
+                      </FormControl>
+
+                      <SelectContent>
                         {JOB_TYPES.map((types) => (
-                          <option key={types} value={types}>
+                          <SelectItem key={types} value={types}>
                             {types}
-                          </option>
+                          </SelectItem>
                         ))}
-                      </Select>
-                    </FormControl>
+                      </SelectContent>
+                    </Select>
                   </FormItem>
                 )}
               />
@@ -129,20 +144,29 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
             <div className="flex flex-col gap-2">
               <FormField
                 control={form.control}
-                name="type"
+                name="location"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel htmlFor="location">Location</FormLabel>
-                    <FormControl>
-                      <Select id="location" disabled={isPending} {...field}>
-                        <option value="">All Locations</option>
+                    <Select
+                      disabled={isPending}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a location" />
+                        </SelectTrigger>
+                      </FormControl>
+
+                      <SelectContent>
                         {jobLocations.map((location) => (
-                          <option key={location} value={location}>
+                          <SelectItem key={location} value={location}>
                             {location}
-                          </option>
+                          </SelectItem>
                         ))}
-                      </Select>
-                    </FormControl>
+                      </SelectContent>
+                    </Select>
                   </FormItem>
                 )}
               />

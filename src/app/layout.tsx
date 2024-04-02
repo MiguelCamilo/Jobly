@@ -8,7 +8,10 @@ import Footer from '@/components/footer';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Remotely ©",
+  title: {
+    default: "Remotely ©",
+    template: "%s | Remotely ©",
+  },
   description: "Find a Job, Post a Job, Get a Job",
 };
 
