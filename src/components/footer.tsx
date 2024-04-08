@@ -1,6 +1,20 @@
 import Link from "next/link";
 
 const Footer = () => {
+  const links = [
+    {
+      href: "/about",
+      label: "About Jobly",
+    },
+    {
+      href: "/terms",
+      label: "Terms of Service",
+    },
+    {
+      href: "/privacy",
+      label: "Privacy Policy",
+    },
+  ];
   return (
     <footer className="border-t">
       <div className="mx-auto max-w-5xl space-y-5 px-3 py-5">
@@ -12,18 +26,15 @@ const Footer = () => {
             </p>
           </div>
           <div className="flex flex-wrap gap-5 text-sm text-muted-foreground">
-            <Link href="/about" className="hover:underline">
-              About Us
-            </Link>
-            <Link href="/contact" className="hover:underline">
-              Contact
-            </Link>
-            <Link href="/terms" className="hover:underline">
-              Terms of Service
-            </Link>
-            <Link href="/privacy" className="hover:underline">
-              Privacy Policy
-            </Link>
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="hover:cursor-pointer hover:underline"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
         <div className="text-center text-sm text-muted-foreground">
@@ -32,6 +43,6 @@ const Footer = () => {
       </div>
     </footer>
   );
-}
+};
 
 export default Footer;

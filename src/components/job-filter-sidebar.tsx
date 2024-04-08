@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import filterJobs from "../../actions/filter-jobs";
 import findAllJobLocations from "../../actions/find-all-locations";
 import { JOB_TYPES } from "@/lib/constants/job-types";
-import { JobFilterValues, JobFilterSchema } from "@/lib/schemas/validation";
+import { IJobFilterValues, JobFilterSchema } from "@/lib/schemas/validation";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "./ui/button";
@@ -36,7 +36,7 @@ import { FormError } from "@/components/form-error";
 import LoadingButtonText from "@/components/ui/loading-button-text";
 
 interface JobFilterSidebarProps {
-  defaultValues: JobFilterValues;
+  defaultValues: IJobFilterValues;
 }
 
 const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {

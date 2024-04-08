@@ -1,4 +1,4 @@
-import { JobFilterValues } from "@/lib/schemas/validation";
+import { IJobFilterValues } from "@/lib/schemas/validation";
 
 import JobResults from "@/components/job-results";
 import JobFilterSidebar from "@/components/job-filter-sidebar";
@@ -13,7 +13,7 @@ interface PageProps {
   };
 }
 
-const createTitleFromFilters = ({ query, type, location }: JobFilterValues) => {
+const createTitleFromFilters = ({ query, type, location }: IJobFilterValues) => {
   const titlePrefix = query ? `${query} jobs` : type ? `${type} Jobs` : "Available Jobs"
   const titleSuffix = location ? ` in ${location}` : ""
 
@@ -36,7 +36,7 @@ export default async function Home({
   searchParams: { query, type, location, remote },
 }: PageProps) {
 
-  const filterValues: JobFilterValues = {
+  const filterValues: IJobFilterValues = {
     query,
     type,
     location,

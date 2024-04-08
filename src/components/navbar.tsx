@@ -1,9 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { Plus } from "lucide-react";
+
 import logo from "@/assets/company-logo.png"
 
-import { Button } from '@/components/ui/button'
 import ButtonWithIcon from '@/components/ui/button-icon'
 
 const Navbar = () => {
@@ -16,7 +17,7 @@ const Navbar = () => {
                     <Image src={logo} alt='company logo image' width={40} height={40}/>
                     <span className='text-xl font-bold tracking-tight'>Jobly</span>
                 </Link>
-                <ButtonWithIcon>
+                <ButtonWithIcon icon={Plus}>
                     <Link href="/">Post a Job</Link>
                 </ButtonWithIcon>
             </nav>
