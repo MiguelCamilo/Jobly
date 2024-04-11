@@ -1,8 +1,9 @@
 import { IJobFilterValues } from "@/lib/schemas/validation";
 
+import Navbar from "@/components/navbar";
 import JobResults from "@/components/job-results";
 import JobFilterSidebar from "@/components/job-filter-sidebar";
-import { Metadata } from 'next';
+import { Metadata } from "next";
 
 interface PageProps {
   searchParams: {
@@ -13,29 +14,37 @@ interface PageProps {
   };
 }
 
-const createTitleFromFilters = ({ query, type, location }: IJobFilterValues) => {
-  const titlePrefix = query ? `${query} jobs` : type ? `${type} Jobs` : "Available Jobs"
-  const titleSuffix = location ? ` in ${location}` : ""
+const createTitleFromFilters = ({
+  query,
+  type,
+  location,
+}: IJobFilterValues) => {
+  const titlePrefix = query
+    ? `${query} jobs`
+    : type
+      ? `${type} Jobs`
+      : "Available Jobs";
+  const titleSuffix = location ? ` in ${location}` : "";
 
-  return `${titlePrefix}${titleSuffix}`
-}
+  return `${titlePrefix}${titleSuffix}`;
+};
 
-
-export function generateMetadata ({ searchParams: { query, type, location, remote } }: PageProps): Metadata {
+export function generateMetadata({
+  searchParams: { query, type, location, remote },
+}: PageProps): Metadata {
   return {
     title: createTitleFromFilters({
       query,
       type,
       location,
       remote: remote === "true",
-    })
-  }
+    }),
+  };
 }
 
 export default async function Home({
   searchParams: { query, type, location, remote },
 }: PageProps) {
-
   const filterValues: IJobFilterValues = {
     query,
     type,
@@ -43,22 +52,24 @@ export default async function Home({
     remote: remote === "true",
   };
 
-  
   return (
-    <main className="m-auto my-10 max-w-5xl space-y-10 px-3">
-      <div className="space-y-5 text-center">
-        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
-          {createTitleFromFilters(filterValues)}
-        </h1>
-        <p className="text-muted-foreground">
-          Find a job that fits your lifestyle.
-        </p>
-      </div>
+    <>
+      <Navbar />
+      <main className="m-auto my-10 max-w-5xl space-y-10 px-3">
+        <div className="space-y-5 text-center">
+          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
+            {createTitleFromFilters(filterValues)}
+          </h1>
+          <p className="text-muted-foreground">
+            Find a job that fits your lifestyle.
+          </p>
+        </div>
 
-      <section className="flex flex-col gap-4 md:flex-row">
-        <JobFilterSidebar defaultValues={filterValues} />
-        <JobResults filterValues={filterValues} />
-      </section>
-    </main>
+        <section className="flex flex-col gap-4 md:flex-row">
+          <JobFilterSidebar defaultValues={filterValues} />
+          <JobResults filterValues={filterValues} />
+        </section>
+      </main>
+    </>
   );
 }
