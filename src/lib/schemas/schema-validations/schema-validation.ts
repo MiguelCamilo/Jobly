@@ -8,9 +8,9 @@ export const numericValidation  = requiredValidation.regex(/^\d+$/, "Value must 
 
 export const companyLogoUrlValidation = 
   z.custom<File | undefined>()
-  .refine((file) => {
-    !file || (file instanceof File && file.type.startsWith("image/"));
-  }, "Invalid file type. Please upload an image file.")
+  .refine((file) => !file || (file instanceof File && file.type.startsWith("image/")),
+    "Invalid file type. Please upload an image file."
+    )
   .refine((file) => {
     return !file || file.size < 1024 * 1024 * 2; // max size of 2MB
   }, "File must be less than 2MB.");

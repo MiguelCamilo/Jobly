@@ -69,7 +69,7 @@ const About = () => {
                   talent and opportunity.
                 </p>
               </div>
-              <div className="space-y-4">
+              <div className="lg:flex lg:justify-center lg:items-center lg:flex-col space-y-4">
                 <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800">
                   Our Values
                 </div>

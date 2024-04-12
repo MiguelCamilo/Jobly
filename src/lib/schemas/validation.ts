@@ -1,6 +1,7 @@
 import * as z from "zod";
 
-import { JOB_TYPES } from "../constants/job-types";
+import { JOB_TYPES, LOCATION_TYPES } from "../constants/job-types";
+import { LOCATION_TYPES_ENUM } from '../enums/enums';
 
 import {
   requiredValidation,
@@ -17,6 +18,19 @@ const ApplicationSchema = z.object({
     path: ["applicationEmail"], // if this error is thrown, it will be shown on the applicationEmail field
 });
 
+const LocationSchema = z.object({
+    locationType: requiredValidation.refine(
+        (value) => LOCATION_TYPES.includes(value),
+        "Invalid Location Type."
+    ),
+    location: z.string().optional(), 
+}).refine((data) => {
+    !data.locationType || data.locationType === LOCATION_TYPES_ENUM.REMOTE || data.location, {
+        message: "Location type is required",
+        path: [location]
+    }
+})
+
 export const CreateJobSchema = z.object({
   title: requiredValidation.max(100),
   type: requiredValidation.refine(
@@ -29,7 +43,10 @@ export const CreateJobSchema = z.object({
   salary: numericValidation.max(9,
     "Salary value can't be longer than 9 digits.",
   ),
-}).and(ApplicationSchema); // merges another schema but allows for seperate validation errors to be thrown
+})
+// merges another schema but allows for seperate validation errors to be thrown
+.and(ApplicationSchema)
+.and(LocationSchema)
 
 export const JobFilterSchema = z.object({
   query: z.string().optional(),

@@ -7,7 +7,7 @@ interface AboutLayoutProps {
 export default function AboutLayout({ children }: AboutLayoutProps) {
   return (
     <div>
-      <Navbar hideButton={true} />
+      <Navbar hideButton />
       {children}
     </div>
   )
