@@ -1,17 +1,11 @@
-import { Metadata } from 'next';
+import { Metadata } from "next";
 
-import NewJobForm from './new-jobform';
-import Navbar from '@/components/navbar';
+import NewJobForm from "@/components/new-jobform";
 
 export const metadata: Metadata = {
-    title: "Post a New Job"
-}
+  title: "Post a New Job",
+};
 
 export default function Page() {
-    return (
-        <>
-            <Navbar  showbackArrow />
-            <NewJobForm />
-        </>
-    )
+  return <NewJobForm />;
 }

@@ -1,10 +1,10 @@
 import findApprovedJobs from "../../actions/find-approved-jobs";
-import { JobFilterValues } from "@/lib/schemas/validation";
+import { IJobFilterValues } from "@/lib/schemas/validation";
 
 import JobListeItem from "@/components/job-list-item";
 
 interface JobResultsProps {
-  filterValues: JobFilterValues;
+  filterValues: IJobFilterValues;
 }
 
 const JobResults = async ({ filterValues }: JobResultsProps) => {

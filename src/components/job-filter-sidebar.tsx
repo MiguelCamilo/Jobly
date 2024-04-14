@@ -1,12 +1,11 @@
 "use client";
 
 import * as z from "zod";
-import * as React from "react";
-import { useRouter } from "next/navigation";
-
 import { useForm } from "react-hook-form";
 import { ZodError } from "zod";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useState, useTransition } from 'react';
 
 import filterJobs from "../../actions/filter-jobs";
 import findAllJobLocations from "../../actions/find-all-locations";
@@ -42,9 +41,9 @@ interface JobFilterSidebarProps {
 const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
   const router = useRouter();
 
-  const [isPending, startTransition] = React.useTransition();
-  const [jobLocations, setJobLocations] = React.useState<string[]>([]);
-  const [error, setError] = React.useState<ZodError>();
+  const [isPending, startTransition] = useTransition();
+  const [jobLocations, setJobLocations] = useState<string[]>([]);
+  const [error, setError] = useState<ZodError>();
 
   const { watch, ...form } = useForm<z.infer<typeof JobFilterSchema>>({
     resolver: zodResolver(JobFilterSchema),
@@ -55,6 +54,9 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
       remote: defaultValues?.remote, // TODO: fix: value is not being passed to the url params
     },
   });
+
+  const formValues = watch();
+  const hasValues = Object.values(formValues).some((value) => value);
 
   const onFilterSubmit = (values: z.infer<typeof JobFilterSchema>) => {
     startTransition(() => {
@@ -78,9 +80,6 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
     };
     fetchJobLocations();
   }, []);
-
-  const formValues = watch();
-  const hasValues = Object.values(formValues).some((value) => value);
 
   return (
     // h-fit onlys makes the the height fit the content
