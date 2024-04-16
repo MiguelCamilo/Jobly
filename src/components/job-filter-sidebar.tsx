@@ -84,6 +84,7 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
   return (
     // h-fit onlys makes the the height fit the content
     <aside className="sticky top-0 h-fit rounded-lg bg-background p-4 md:w-[260px]">
+      {/* TODO: add filter header */}
       <Form {...form} watch={watch}>
         {/* key attribute updates react anytime defaultValue changes and re-renders this component with the new data */}
         <form onSubmit={form.handleSubmit(onFilterSubmit)} key={JSON.stringify(defaultValues)}>
