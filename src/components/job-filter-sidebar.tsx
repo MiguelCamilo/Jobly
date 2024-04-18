@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { ZodError } from "zod";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState, useTransition } from 'react';
+import React, { useState, useTransition } from "react";
 
 import filterJobs from "../../actions/filter-jobs";
 import findAllJobLocations from "../../actions/find-all-locations";
@@ -87,7 +87,10 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
       {/* TODO: add filter header */}
       <Form {...form} watch={watch}>
         {/* key attribute updates react anytime defaultValue changes and re-renders this component with the new data */}
-        <form onSubmit={form.handleSubmit(onFilterSubmit)} key={JSON.stringify(defaultValues)}>
+        <form
+          onSubmit={form.handleSubmit(onFilterSubmit)}
+          key={JSON.stringify(defaultValues)}
+        >
           <FormError message={error?.message} />
           <div className="space-y-4">
             <div className="flex flex-col gap-2">
@@ -116,7 +119,7 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor="type">Type</FormLabel>
+                    <FormLabel>Type</FormLabel>
                     <Select
                       disabled={isPending}
                       onValueChange={field.onChange}
@@ -129,9 +132,9 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
                       </FormControl>
 
                       <SelectContent>
-                        {JOB_TYPES.map((types) => (
-                          <SelectItem key={types} value={types}>
-                            {types}
+                        {JOB_TYPES.map((type) => (
+                          <SelectItem key={type} value={type}>
+                            {type}
                           </SelectItem>
                         ))}
                       </SelectContent>

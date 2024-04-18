@@ -17,6 +17,7 @@ import {
   MenubarContent,
   MenubarTrigger,
   MenubarItem,
+  MenubarSeparator,
 } from "@/components/ui/menubar";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 
@@ -26,10 +27,10 @@ const Navbar = () => {
   const [showbackArrow, setShowbackArrow] = useState<boolean>(false);
 
   useEffect(() => {
-    const isBackButtonEnabled = backButtonEnabledRoutes.some((path) =>
+    const isBackButtonEnabledRoute = backButtonEnabledRoutes.some((path) =>
       pathname.includes(path),
     );
-    setShowbackArrow(isBackButtonEnabled);
+    setShowbackArrow(isBackButtonEnabledRoute);
   }, [pathname]);
   return (
     <header className="shadow-sm">
@@ -71,15 +72,13 @@ const Navbar = () => {
               <HamburgerMenuIcon className="size-4" />
             </MenubarTrigger>
 
-            <MenubarContent>
-              <MenubarItem>
-                <ButtonWithIcon
-                  variants="ghost"
-                  icon={Plus}
-                  onClick={() => router.push("/jobs/new")}
-                >
-                  Post Job
-                </ButtonWithIcon>
+            <MenubarContent align="end">
+              <MenubarItem
+                onClick={() => router.push("/jobs/new")}
+                className="flex gap-2 hover:cursor-pointer"
+              >
+                <Plus className="size-4" />
+                Post a Job
               </MenubarItem>
             </MenubarContent>
           </MenubarMenu>
