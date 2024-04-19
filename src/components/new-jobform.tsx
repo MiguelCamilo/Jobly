@@ -31,7 +31,10 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import LocationInput from './location-input';
+import LocationInput from "./location-input";
+import { X } from "lucide-react";
+import { Label } from "./ui/label";
+import RichTextEditor from './rich-text-editor';
 
 const NewJobForm = () => {
   const { watch, ...form } = useForm<z.infer<typeof CreateJobSchema>>({
@@ -40,9 +43,11 @@ const NewJobForm = () => {
       title: "",
       type: "",
       companyName: "",
-      companyLogoUrl: "",
+      // companyLogoUrl: "",
       description: "",
       salary: "",
+      applicationEmail: "",
+      applicationUrl: "",
     },
   });
 
@@ -231,11 +236,88 @@ const NewJobForm = () => {
                     <FormLabel>Location of Job</FormLabel>
                     <FormControl>
                       <LocationInput
-                        // {...field}
                         ref={field.ref}
-                        onLocationSelected={field.onChange}                        
+                        onLocationSelected={field.onChange}
                         // disabled={isPending}
                       />
+                    </FormControl>
+
+                    {watch("location") && (
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            form.setValue("location", "", {
+                              shouldValidate: true, // if remote is true then validation error will show
+                            })
+                          }
+                        >
+                          <X className="size-4" />
+                        </button>
+                        <span className="text-sm text-foreground">
+                          {watch("location")}
+                        </span>
+                      </div>
+                    )}
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="space-y-2">
+                <Label htmlFor="applicationEmail">How to apply</Label>
+
+                <div className="flex justify-between">
+                  <FormField
+                    control={form.control}
+                    name="applicationEmail"
+                    render={({ field }) => (
+                      <FormItem className="grow">
+                        <FormControl>
+                          <div className="flex items-center">
+                            <Input
+                              id="applicationEmail"
+                              placeholder="Email"
+                              type="email"
+                              {...field}
+                            />
+                            <span className="mx-2 text-muted-foreground">
+                              or
+                            </span>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="applicationUrl"
+                    render={({ field }) => (
+                      <FormItem className="grow">
+                        <FormControl>
+                          <Input placeholder="Website" type="url" {...field} onChange={(e) => {
+                            field.onChange(e)
+                            form.trigger("applicationEmail") // will trigger the email validation when the url input is written in
+                          }} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label>Job Description</Label>
+                    <FormControl>
+                      <RichTextEditor  />                      
                     </FormControl>
                     <FormMessage />
                   </FormItem>
