@@ -1,10 +1,11 @@
+import { Metadata } from "next";
+import { Suspense } from "react";
+
 import { IJobFilterValues } from "@/lib/schemas/validation";
 
 import JobResults from "@/components/job-results";
 import JobFilterSidebar from "@/components/job-filter-sidebar";
-import { Metadata } from "next";
-import { Suspense } from "react";
-import LoadingAnimation from "@/components/loading-animation";
+import JobResultsLoadingAnimation from "@/components/job-results-loading-animation";
 
 interface PageProps {
   searchParams: {
@@ -65,7 +66,7 @@ export default async function Home({
           </p>
         </div>
 
-        <Suspense fallback={<LoadingAnimation />}>
+        <Suspense fallback={<JobResultsLoadingAnimation />}>
           <section className="flex flex-col gap-4 md:flex-row">
             <JobFilterSidebar defaultValues={filterValues} />
             <JobResults filterValues={filterValues} />

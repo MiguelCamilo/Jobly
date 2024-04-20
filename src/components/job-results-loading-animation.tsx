@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-const LoadingAnimation = () => {
+const JobResultsLoadingAnimation = () => {
   return (
     <div className="flex flex-col p-6 md:flex-row md:space-x-6">
       <div className="w-full mb-5 sm:mb-0 space-y-4 md:w-1/4">
@@ -45,4 +45,4 @@ const LoadingAnimation = () => {
   );
 };
 
-export default LoadingAnimation;
+export default JobResultsLoadingAnimation;

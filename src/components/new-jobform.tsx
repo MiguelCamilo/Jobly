@@ -3,11 +3,13 @@
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import RichTextEditor from "./rich-text-editor";
+import { draftToMarkdown } from 'markdown-draft-js';
 
 import { CreateJobSchema } from "@/lib/schemas/validation";
+import { JOB_TYPES, LOCATION_TYPES } from "@/lib/constants/job-types";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -23,18 +25,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { JOB_TYPES, LOCATION_TYPES } from "@/lib/constants/job-types";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
-import LocationInput from "./location-input";
-import { X } from "lucide-react";
-import { Label } from "./ui/label";
-import RichTextEditor from './rich-text-editor';
+} from "@/components/ui/card";
+import LoadingButtonText from '@/components/ui/loading-button-text';
+import LocationInput from "@/components/location-input";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from './ui/button';
+// import { Button } from "@/components/ui/button";
+
 
 const NewJobForm = () => {
   const { watch, ...form } = useForm<z.infer<typeof CreateJobSchema>>({
@@ -61,8 +65,8 @@ const NewJobForm = () => {
   //   formState: { isSubmitting },
   // } = form;
 
-  const onJobPostSubmit = (values: z.infer<typeof CreateJobSchema>) => {
-    console.log(JSON.stringify(values, null, 2));
+  const onJobPostSubmit = async (values: z.infer<typeof CreateJobSchema>) => {
+    alert(JSON.stringify(values, null, 2));
   };
   return (
     <main className="m-auto my-10 max-w-3xl space-y-10">
@@ -158,27 +162,10 @@ const NewJobForm = () => {
 
               <FormField
                 control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Job Title</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        // disabled={isPending}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
                 name="companyLogoUrl"
                 render={({ field: { value, ...fieldValues } }) => (
                   <FormItem>
-                    <FormLabel>Job Title</FormLabel>
+                    <FormLabel>Company Logo</FormLabel>
                     <FormControl>
                       <Input
                         {...fieldValues}
@@ -203,7 +190,7 @@ const NewJobForm = () => {
                 name="locationType"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>Location Type</FormLabel>
                     <Select
                       // disabled={isPending}
                       onValueChange={field.onChange}
@@ -211,7 +198,7 @@ const NewJobForm = () => {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select an option" />
+                          <SelectValue placeholder="Remote / OnSite / Hybrid"  />
                         </SelectTrigger>
                       </FormControl>
 
@@ -252,11 +239,11 @@ const NewJobForm = () => {
                             })
                           }
                         >
-                          <X className="size-4" />
+                          <span className="flex items-center gap-1 rounded-md border p-2 text-sm text-foreground">
+                            <X className="size-4" />
+                            {watch("location")}
+                          </span>
                         </button>
-                        <span className="text-sm text-foreground">
-                          {watch("location")}
-                        </span>
                       </div>
                     )}
 
@@ -298,10 +285,15 @@ const NewJobForm = () => {
                     render={({ field }) => (
                       <FormItem className="grow">
                         <FormControl>
-                          <Input placeholder="Website" type="url" {...field} onChange={(e) => {
-                            field.onChange(e)
-                            form.trigger("applicationEmail") // will trigger the email validation when the url input is written in
-                          }} />
+                          <Input
+                            placeholder="Website"
+                            type="url"
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              form.trigger("applicationEmail"); // will trigger the email validation when the url input is written in
+                            }}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -312,19 +304,42 @@ const NewJobForm = () => {
 
               <FormField
                 control={form.control}
+                name="salary"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Salary</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="number"
+                        // disabled={isPending}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="description"
                 render={({ field }) => (
                   <FormItem>
                     <Label>Job Description</Label>
                     <FormControl>
-                      <RichTextEditor  />                      
+                      <RichTextEditor  
+                        ref={field.ref}
+                        onChange={(draft) => field.onChange(draftToMarkdown(draft))}
+                      />   
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <Button type="submit" variant="default" className="w-full">
-                Submit
+                <LoadingButtonText isPending={false}>
+                  Submit
+                </LoadingButtonText>
               </Button>
             </form>
           </Form>
