@@ -17,3 +17,10 @@ export function formatCurrency(amount: number) {
 export function relativeDate(from: Date) {
   return formatDistanceToNowStrict(from, { addSuffix: true })
 }
+
+export function createSlug(str: string) {
+  return str
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[^\w-]+/g, ""); // replaces multiple spaces and dashes with one space
+}

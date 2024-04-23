@@ -2,7 +2,6 @@
 
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { ZodError } from "zod";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState, useTransition } from "react";
@@ -10,7 +9,7 @@ import React, { useState, useTransition } from "react";
 import filterJobs from "../../actions/filter-jobs";
 import findAllJobLocations from "../../actions/find-all-locations";
 import { JOB_TYPES } from "@/lib/constants/job-types";
-import { IJobFilterValues, JobFilterSchema } from "@/lib/schemas/validation";
+import { IJobFilterSchema, JobFilterSchema } from "@/lib/schemas/validation";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "./ui/button";
@@ -35,7 +34,7 @@ import { FormError } from "@/components/form-error";
 import LoadingButtonText from "@/components/ui/loading-button-text";
 
 interface JobFilterSidebarProps {
-  defaultValues: IJobFilterValues;
+  defaultValues: IJobFilterSchema;
 }
 
 const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
@@ -43,7 +42,7 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
 
   const [isPending, startTransition] = useTransition();
   const [jobLocations, setJobLocations] = useState<string[]>([]);
-  const [error, setError] = useState<ZodError>();
+  const [error, setError] = useState<z.ZodError>();
 
   const { watch, ...form } = useForm<z.infer<typeof JobFilterSchema>>({
     resolver: zodResolver(JobFilterSchema),

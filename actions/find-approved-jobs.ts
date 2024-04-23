@@ -3,10 +3,10 @@
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 
-import { IJobFilterValues } from "@/lib/schemas/validation";
+import { IJobFilterSchema} from "@/lib/schemas/validation";
 
 interface IFindApprovedJobsProps {
-  filterValues: IJobFilterValues;
+  filterValues: IJobFilterSchema;
 }
 
 export default async function findApprovedJobs({

@@ -12,7 +12,7 @@ import {
 const ApplicationSchema = z.object({
     // .or(z.literal("")) is used to allow an empty string but still allowing .email() to validate
     applicationEmail: z.string().max(100).email().optional().or(z.literal("")),
-    applicationUrl: z.string().max(100).email().optional().or(z.literal("")),
+    applicationUrl: z.string().max(100).url().optional().or(z.literal("")),
 }).refine(data => data.applicationEmail || data.applicationUrl, {
     message: "Either an email or a URL is required.",
     path: ["applicationEmail"], // if this error is thrown, it will be shown on the applicationEmail field
@@ -23,13 +23,13 @@ const LocationSchema = z.object({
         (value) => LOCATION_TYPES.includes(value),
         "Invalid Location Type."
     ),
-    location: z.string().optional(), 
-}).refine((data) => {
-    !data.locationType || data.locationType === LOCATION_TYPES_ENUM.REMOTE || data.location, {
+    location: z.string().max(100).optional(), 
+}).refine((data) => 
+     !data.locationType || data.locationType === LOCATION_TYPES_ENUM.REMOTE || data.location, {
         message: "Location type is required",
-        path: [location]
+        path: ["location"]
     }
-})
+)
 
 export const CreateJobSchema = z.object({
   title: requiredValidation.max(100),
@@ -54,5 +54,5 @@ export const JobFilterSchema = z.object({
   location: z.string().optional(),
   remote: z.coerce.boolean().optional(), // coerce will take the urlSearchParams and if the string exist it will turn it into a boolean value
 });
-export type IJobFilterValues = z.infer<typeof JobFilterSchema>; // creates a type from the schema
+export type IJobFilterSchema = z.infer<typeof JobFilterSchema>; // creates a type from the schema
 export type ICreateJobSchema = z.infer<typeof CreateJobSchema>

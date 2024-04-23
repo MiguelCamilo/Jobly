@@ -1,11 +1,13 @@
 "use client";
 
 import * as z from "zod";
+import { useState, useTransition } from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import RichTextEditor from "./rich-text-editor";
 import { draftToMarkdown } from 'markdown-draft-js';
 
+import createJobPosting from '../../actions/create-job';
 import { CreateJobSchema } from "@/lib/schemas/validation";
 import { JOB_TYPES, LOCATION_TYPES } from "@/lib/constants/job-types";
 
@@ -32,22 +34,27 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { FormError } from '@/components/form-error';
 import LoadingButtonText from '@/components/ui/loading-button-text';
 import LocationInput from "@/components/location-input";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Button } from './ui/button';
-// import { Button } from "@/components/ui/button";
-
+import { Button } from "@/components/ui/button";
 
 const NewJobForm = () => {
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string>();
+
+  
   const { watch, ...form } = useForm<z.infer<typeof CreateJobSchema>>({
     resolver: zodResolver(CreateJobSchema),
     defaultValues: {
       title: "",
       type: "",
+      location: "",
+      locationType: "",
       companyName: "",
-      // companyLogoUrl: "",
+      companyLogoUrl: undefined,
       description: "",
       salary: "",
       applicationEmail: "",
@@ -55,18 +62,17 @@ const NewJobForm = () => {
     },
   });
 
-  // const {
-  //   handleSubmit,
-  //   watch,
-  //   trigger,
-  //   control,
-  //   setValue,
-  //   setFocus,
-  //   formState: { isSubmitting },
-  // } = form;
-
-  const onJobPostSubmit = async (values: z.infer<typeof CreateJobSchema>) => {
-    alert(JSON.stringify(values, null, 2));
+  const onJobPostSubmit = (values: z.infer<typeof CreateJobSchema>) => {
+    startTransition(async () => {
+      await createJobPosting(values)
+        .then((response) => {
+          
+        })
+        .catch((error) => {
+          console.error(`Unable to Create Job: ${error}`)
+          setError(error)
+        })
+    })
   };
   return (
     <main className="m-auto my-10 max-w-3xl space-y-10">
@@ -102,9 +108,9 @@ const NewJobForm = () => {
                     <FormLabel>Job Title</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Ex: Senior Software Engineer"
                         {...field}
-                        // disabled={isSubmitting}
+                        disabled={isPending}
+                        placeholder="Ex: Senior Software Engineer"
                       />
                     </FormControl>
                     <FormMessage />
@@ -119,7 +125,7 @@ const NewJobForm = () => {
                   <FormItem>
                     <FormLabel>Job Type</FormLabel>
                     <Select
-                      // disabled={isPending}
+                      disabled={isPending}
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
@@ -151,8 +157,8 @@ const NewJobForm = () => {
                     <FormControl>
                       <Input
                         {...field}
+                        disabled={isPending}
                         placeholder="Ex: Google / Apple / Microsoft"
-                        // disabled={isPending}
                       />
                     </FormControl>
                     <FormMessage />
@@ -171,13 +177,13 @@ const NewJobForm = () => {
                         {...fieldValues}
                         type="file"
                         accept="image/*"
+                        disabled={isPending}
                         onChange={(e) => {
                           // since our schema validation expects a "File" type and not a file list
                           // we grab the first file and let react-hook-form handle the change
                           const file = e.target.files?.[0];
                           fieldValues.onChange(file);
                         }}
-                        // disabled={isPending}
                       />
                     </FormControl>
                     <FormMessage />
@@ -192,7 +198,7 @@ const NewJobForm = () => {
                   <FormItem>
                     <FormLabel>Location Type</FormLabel>
                     <Select
-                      // disabled={isPending}
+                      disabled={isPending}
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
@@ -224,8 +230,8 @@ const NewJobForm = () => {
                     <FormControl>
                       <LocationInput
                         ref={field.ref}
+                        disabled={isPending}
                         onLocationSelected={field.onChange}
-                        // disabled={isPending}
                       />
                     </FormControl>
 
@@ -233,11 +239,11 @@ const NewJobForm = () => {
                       <div className="flex items-center gap-1">
                         <button
                           type="button"
-                          onClick={() =>
+                          onClick={() => {
                             form.setValue("location", "", {
                               shouldValidate: true, // if remote is true then validation error will show
                             })
-                          }
+                          }}
                         >
                           <span className="flex items-center gap-1 rounded-md border p-2 text-sm text-foreground">
                             <X className="size-4" />
@@ -312,7 +318,7 @@ const NewJobForm = () => {
                       <Input
                         {...field}
                         type="number"
-                        // disabled={isPending}
+                        disabled={isPending}
                       />
                     </FormControl>
                     <FormMessage />
@@ -342,11 +348,12 @@ const NewJobForm = () => {
                 </LoadingButtonText>
               </Button>
             </form>
+            <FormError message={error} />
           </Form>
         </CardContent>
       </Card>
     </main>
-  );
+  );  
 };
 
 export default NewJobForm;

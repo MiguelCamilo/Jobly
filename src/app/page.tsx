@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { Suspense } from "react";
 
-import { IJobFilterValues } from "@/lib/schemas/validation";
+import { IJobFilterSchema } from "@/lib/schemas/validation";
 
 import JobResults from "@/components/job-results";
 import JobFilterSidebar from "@/components/job-filter-sidebar";
@@ -20,7 +20,7 @@ const createTitleFromFilters = ({
   query,
   type,
   location,
-}: IJobFilterValues) => {
+}: IJobFilterSchema) => {
   const titlePrefix = query
     ? `${query} jobs`
     : type
@@ -47,7 +47,7 @@ export function generateMetadata({
 export default async function Home({
   searchParams: { query, type, location, remote },
 }: PageProps) {
-  const filterValues: IJobFilterValues = {
+  const filterValues: IJobFilterSchema = {
     query,
     type,
     location,
