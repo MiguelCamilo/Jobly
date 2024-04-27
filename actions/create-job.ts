@@ -10,6 +10,7 @@ import { createSlug } from '@/lib/utils';
 import { CreateJobSchema, ICreateJobSchema } from '@/lib/schemas/validation';
 
 export default async function createJobPosting(values: ICreateJobSchema) {
+    console.log(`SERVER LOGGED VALUES ${values}`)
     const {
         title,
         type,

@@ -63,10 +63,11 @@ const NewJobForm = () => {
   });
 
   const onJobPostSubmit = (values: z.infer<typeof CreateJobSchema>) => {
-    startTransition(async () => {
-      await createJobPosting(values)
+    console.log(`ON JOB SUBMIT VALUES ${JSON.stringify(values, null, 2)}`)
+    startTransition(() => {
+      createJobPosting(values)
         .then((response) => {
-          
+          console.log(`LOGGING REPOSNE ${response}`)
         })
         .catch((error) => {
           console.error(`Unable to Create Job: ${error}`)
@@ -183,6 +184,7 @@ const NewJobForm = () => {
                           // we grab the first file and let react-hook-form handle the change
                           const file = e.target.files?.[0];
                           fieldValues.onChange(file);
+                          console.log(`LOGGING FILE ${JSON.stringify(file, null, 2)}`)
                         }}
                       />
                     </FormControl>

@@ -69,7 +69,7 @@ const Navbar = () => {
         <Menubar>
           <MenubarMenu>
             <MenubarTrigger>
-              <HamburgerMenuIcon className="size-4" />
+              <HamburgerMenuIcon className="size-4 hover:cursor-pointer" />
             </MenubarTrigger>
 
             <MenubarContent align="end">
