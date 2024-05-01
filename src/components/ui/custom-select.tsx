@@ -3,7 +3,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 
-const Select = React.forwardRef<HTMLSelectElement, React.HTMLProps<HTMLSelectElement>>(({ className, ...props }, ref) => {
+const CustomSelect = React.forwardRef<HTMLSelectElement, React.HTMLProps<HTMLSelectElement>>(({ className, ...props }, ref) => {
   return (
     <div className="relative">
       <select
@@ -21,6 +21,6 @@ const Select = React.forwardRef<HTMLSelectElement, React.HTMLProps<HTMLSelectEle
   );
 });
 
-Select.displayName = "Select";
+CustomSelect.displayName = "CustomSelect";
 
-export default Select;
+export default CustomSelect;

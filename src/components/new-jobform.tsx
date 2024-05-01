@@ -1,17 +1,20 @@
 "use client";
 
-import * as z from "zod";
-import { useState, useTransition } from 'react';
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import RichTextEditor from "./rich-text-editor";
-import { draftToMarkdown } from 'markdown-draft-js';
+import { draftToMarkdown } from "markdown-draft-js";
 
-import createJobPosting from '../../actions/create-job';
-import { CreateJobSchema } from "@/lib/schemas/validation";
+import { createJobPosting } from "../../actions/create-job";
+import { CreateJobSchema, ICreateJobSchema } from "@/lib/schemas/validation";
 import { JOB_TYPES, LOCATION_TYPES } from "@/lib/constants/job-types";
 
 import { X } from "lucide-react";
+
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { FormError } from "@/components/form-error";
 import {
   Form,
   FormControl,
@@ -21,60 +24,57 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { FormError } from '@/components/form-error';
-import LoadingButtonText from '@/components/ui/loading-button-text';
+import RichTextEditor from "@/components/rich-text-editor";
+import CustomSelect from "@/components/ui/custom-select";
+import LoadingButtonText from "@/components/ui/loading-button-text";
 import LocationInput from "@/components/location-input";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 const NewJobForm = () => {
-  const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string>();
 
-  
-  const { watch, ...form } = useForm<z.infer<typeof CreateJobSchema>>({
+  const form = useForm<ICreateJobSchema>({
     resolver: zodResolver(CreateJobSchema),
-    defaultValues: {
-      title: "",
-      type: "",
-      location: "",
-      locationType: "",
-      companyName: "",
-      companyLogoUrl: undefined,
-      description: "",
-      salary: "",
-      applicationEmail: "",
-      applicationUrl: "",
-    },
   });
 
-  const onJobPostSubmit = (values: z.infer<typeof CreateJobSchema>) => {
-    console.log(`ON JOB SUBMIT VALUES ${JSON.stringify(values, null, 2)}`)
-    startTransition(() => {
-      createJobPosting(values)
-        .then((response) => {
-          console.log(`LOGGING REPOSNE ${response}`)
-        })
-        .catch((error) => {
-          console.error(`Unable to Create Job: ${error}`)
-          setError(error)
-        })
-    })
-  };
+  const {
+    handleSubmit,
+    watch,
+    trigger,
+    control,
+    setValue,
+    setFocus,
+    formState: { isSubmitting },
+  } = form;
+
+  async function onSubmit(values: ICreateJobSchema) {
+    const formData = new FormData();
+
+    Object.entries(values).forEach(([key, value]) => {
+      if (value) {
+        formData.append(key, value);
+      }
+    });
+
+    try {
+      await createJobPosting(formData);
+    } catch (error) {
+      setError("Something went wrong. Please try again.");
+      console.error(error);
+    }
+  }
   return (
     <main className="m-auto my-10 max-w-3xl space-y-10">
       <div className="space-y-5 text-center">
@@ -95,44 +95,39 @@ const NewJobForm = () => {
         </CardHeader>
 
         <CardContent>
-          <Form {...form} watch={watch}>
+          <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(onJobPostSubmit)}
               className="space-y-4"
               noValidate
+              onSubmit={handleSubmit(onSubmit)}
             >
               <FormField
-                control={form.control}
+                control={control}
                 name="title"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Job Title</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        disabled={isPending}
-                        placeholder="Ex: Senior Software Engineer"
-                      />
+                      <Input placeholder="ex: Frontend Developer" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
               <FormField
-                control={form.control}
+                control={control}
                 name="type"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Job Type</FormLabel>
                     <Select
-                      disabled={isPending}
+                      disabled={isSubmitting}
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select an option" />
+                          <SelectValue placeholder="Choose a Job Type" />
                         </SelectTrigger>
                       </FormControl>
 
@@ -148,27 +143,21 @@ const NewJobForm = () => {
                   </FormItem>
                 )}
               />
-
               <FormField
-                control={form.control}
+                control={control}
                 name="companyName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Company Name</FormLabel>
+                    <FormLabel>Company</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        disabled={isPending}
-                        placeholder="Ex: Google / Apple / Microsoft"
-                      />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
               <FormField
-                control={form.control}
+                control={control}
                 name="companyLogoUrl"
                 render={({ field: { value, ...fieldValues } }) => (
                   <FormItem>
@@ -178,13 +167,11 @@ const NewJobForm = () => {
                         {...fieldValues}
                         type="file"
                         accept="image/*"
-                        disabled={isPending}
                         onChange={(e) => {
                           // since our schema validation expects a "File" type and not a file list
                           // we grab the first file and let react-hook-form handle the change
                           const file = e.target.files?.[0];
                           fieldValues.onChange(file);
-                          console.log(`LOGGING FILE ${JSON.stringify(file, null, 2)}`)
                         }}
                       />
                     </FormControl>
@@ -192,21 +179,25 @@ const NewJobForm = () => {
                   </FormItem>
                 )}
               />
-
               <FormField
-                control={form.control}
+                control={control}
                 name="locationType"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location Type</FormLabel>
+                    <FormLabel>Location</FormLabel>
                     <Select
-                      disabled={isPending}
-                      onValueChange={field.onChange}
+                      disabled={isSubmitting}
+                      onValueChange={(e) => {
+                        field.onChange(e)
+                        if (e === "Remote") {
+                          trigger("location");
+                        }
+                      }}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Remote / OnSite / Hybrid"  />
+                          <SelectValue placeholder="Remote / OnSite / Hybrid" />
                         </SelectTrigger>
                       </FormControl>
 
@@ -222,18 +213,16 @@ const NewJobForm = () => {
                   </FormItem>
                 )}
               />
-
               <FormField
-                control={form.control}
+                control={control}
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location of Job</FormLabel>
+                    <FormLabel>Office Location</FormLabel>
                     <FormControl>
                       <LocationInput
-                        ref={field.ref}
-                        disabled={isPending}
                         onLocationSelected={field.onChange}
+                        ref={field.ref}
                       />
                     </FormControl>
 
@@ -242,9 +231,9 @@ const NewJobForm = () => {
                         <button
                           type="button"
                           onClick={() => {
-                            form.setValue("location", "", {
+                            setValue("location", "", {
                               shouldValidate: true, // if remote is true then validation error will show
-                            })
+                            });
                           }}
                         >
                           <span className="flex items-center gap-1 rounded-md border p-2 text-sm text-foreground">
@@ -254,18 +243,15 @@ const NewJobForm = () => {
                         </button>
                       </div>
                     )}
-
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
               <div className="space-y-2">
                 <Label htmlFor="applicationEmail">How to apply</Label>
-
                 <div className="flex justify-between">
                   <FormField
-                    control={form.control}
+                    control={control}
                     name="applicationEmail"
                     render={({ field }) => (
                       <FormItem className="grow">
@@ -277,18 +263,15 @@ const NewJobForm = () => {
                               type="email"
                               {...field}
                             />
-                            <span className="mx-2 text-muted-foreground">
-                              or
-                            </span>
+                            <span className="mx-2">or</span>
                           </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-
                   <FormField
-                    control={form.control}
+                    control={control}
                     name="applicationUrl"
                     render={({ field }) => (
                       <FormItem className="grow">
@@ -299,7 +282,7 @@ const NewJobForm = () => {
                             {...field}
                             onChange={(e) => {
                               field.onChange(e);
-                              form.trigger("applicationEmail"); // will trigger the email validation when the url input is written in
+                              trigger("applicationEmail"); // will trigger the email validation when the url input is typed in
                             }}
                           />
                         </FormControl>
@@ -309,53 +292,51 @@ const NewJobForm = () => {
                   />
                 </div>
               </div>
-
               <FormField
-                control={form.control}
-                name="salary"
+                control={control}
+                name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Salary</FormLabel>
+                    <Label onClick={() => setFocus("description")}>
+                      Description
+                    </Label>
                     <FormControl>
-                      <Input
-                        {...field}
-                        type="number"
-                        disabled={isPending}
+                      <RichTextEditor
+                        onChange={(draft) =>
+                          field.onChange(draftToMarkdown(draft))
+                        }
+                        ref={field.ref}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
               <FormField
-                control={form.control}
-                name="description"
+                control={control}
+                name="salary"
                 render={({ field }) => (
                   <FormItem>
-                    <Label>Job Description</Label>
+                    <FormLabel>Salary</FormLabel>
                     <FormControl>
-                      <RichTextEditor  
-                        ref={field.ref}
-                        onChange={(draft) => field.onChange(draftToMarkdown(draft))}
-                      />   
+                      <Input {...field} type="number" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <Button type="submit" variant="default" className="w-full">
-                <LoadingButtonText isPending={false}>
+                <LoadingButtonText isPending={isSubmitting}>
                   Submit
                 </LoadingButtonText>
               </Button>
+              <FormError message={error} />
             </form>
-            <FormError message={error} />
           </Form>
         </CardContent>
       </Card>
     </main>
-  );  
+  );
 };
 
 export default NewJobForm;
