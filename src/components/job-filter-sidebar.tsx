@@ -57,7 +57,7 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
   const formValues = watch();
   const hasValues = Object.values(formValues).some((value) => value);
 
-  const onFilterSubmit = (values: z.infer<typeof JobFilterSchema>) => {
+  const onFilterSubmit = (values: z.infer<typeof JobFilterSchema>) => {     
     startTransition(() => {
       filterJobs(values)
         .then((response) => {
@@ -83,7 +83,7 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
   return (
     // h-fit onlys makes the the height fit the content
     <aside className="sticky top-0 h-fit rounded-lg bg-background p-4 md:w-[260px]">
-      {/* TODO: add filter header */}
+      {/* TODO: fix: select components dont reset when form.reset is called */}
       <Form {...form} watch={watch}>
         {/* key attribute updates react anytime defaultValue changes and re-renders this component with the new data */}
         <form
@@ -199,7 +199,7 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
               variant={"default"}
               size={"icon"}
               className="w-full"
-              disabled={isPending}
+              disabled={isPending || !hasValues}
             >
               <LoadingButtonText isPending={isPending}>
                 Apply Filters

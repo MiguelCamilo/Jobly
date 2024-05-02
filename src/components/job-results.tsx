@@ -1,7 +1,9 @@
+import Link from "next/link";
+
 import findApprovedJobs from "../../actions/find-approved-jobs";
 import { IJobFilterSchema } from "@/lib/schemas/validation";
 
-import JobListeItem from "@/components/job-list-item";
+import JobListItem from "@/components/job-list-item";
 
 interface JobResultsProps {
   filterValues: IJobFilterSchema;
@@ -12,12 +14,16 @@ const JobResults = async ({ filterValues }: JobResultsProps) => {
 
   return (
     <div className="grow space-y-4">
-      {jobs.map((jobs) => (
-        <JobListeItem key={jobs?.id} job={jobs} />
+      {jobs.map((job) => (
+        <Link key={job?.id} href={`/jobs/${job?.slug}`} className="block">
+          <JobListItem job={job} />
+        </Link>
       ))}
       {jobs.length === 0 && (
-        <div className="text-center m-auto">
-          <p className="text-muted-foreground">No jobs found. Try adjusting your search filters.</p>
+        <div className="m-auto text-center">
+          <p className="text-muted-foreground">
+            No jobs found. Try adjusting your search filters.
+          </p>
         </div>
       )}
     </div>

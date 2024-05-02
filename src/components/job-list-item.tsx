@@ -1,18 +1,18 @@
-import { Job } from "@prisma/client";
+"use client";
 
 import Image from "next/image";
-import { Badge } from '@/components/ui/badge';
+import { Badge } from "@/components/ui/badge";
 import { Banknote, Briefcase, Clock, Globe2, MapPin } from "lucide-react";
 
-import { formatCurrency, relativeDate } from '@/lib/utils';
+import { Job } from "@prisma/client";
+import { formatCurrency, relativeDate } from "@/lib/utils";
 
 import companyLogoPlaceholder from "../assets/company-logo.png";
-
 interface JobListeItemProps {
   job: Job;
 }
 
-const JobListeItem = ({
+const JobListItem = ({
   job: {
     title,
     companyName,
@@ -21,11 +21,11 @@ const JobListeItem = ({
     location,
     salary,
     companyLogoUrl,
-    createdAt,
+    createdAt,    
   },
 }: JobListeItemProps) => {
   return (
-    <article className="flex gap-3 rounded-lg border p-5 hover:bg-muted/60 hover:cursor-pointer">
+    <article className="flex gap-3 rounded-lg border p-5 hover:cursor-pointer hover:bg-muted/60">
       <Image
         src={companyLogoUrl || companyLogoPlaceholder}
         alt={`${companyName} logo`}
@@ -57,7 +57,7 @@ const JobListeItem = ({
               {location}
             </p>
           )}
-          
+
           <p className="flex items-center gap-1.5 ">
             <Banknote size={16} className="shrink-0" />
             {formatCurrency(salary)}
@@ -67,21 +67,18 @@ const JobListeItem = ({
             <Clock size={16} className="shrink-0" />
             {relativeDate(createdAt)}
           </p>
-
         </div>
       </div>
 
-      <div className='hidden sm:flex flex-col shrink-0 items-end justify-between'>
-        <Badge variant={"secondary"}>
-            {type}
-        </Badge>
-        <span className='flex items-center gap-1.5 text-muted-foreground'>
-            <Clock size={16} />
-            {relativeDate(createdAt)}
+      <div className="hidden shrink-0 flex-col items-end justify-between sm:flex">
+        <Badge variant={"secondary"}>{type}</Badge>
+        <span className="flex items-center gap-1.5 text-muted-foreground">
+          <Clock size={16} />
+          {relativeDate(createdAt)}
         </span>
       </div>
     </article>
   );
 };
 
-export default JobListeItem;
+export default JobListItem;

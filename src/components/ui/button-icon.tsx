@@ -14,7 +14,7 @@ interface ButtonWithIconProps {
 const ButtonWithIcon = ({ icon: Icon, variants, onClick, children } : ButtonWithIconProps) => {
   return (
     <Button onClick={onClick} variant={variants}>
-      <Icon height={16} width={16} className='mr-2' />
+      <Icon size={18} className='mr-2' />
       {children}
     </Button>
   );
