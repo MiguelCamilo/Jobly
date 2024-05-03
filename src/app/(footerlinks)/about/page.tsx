@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import { CheckIcon } from "lucide-react";
 
-import placeholder from "../../../assets/placeholder.svg";
+import placeholder from "@/assets/placeholder.svg";
 
 const About = () => {
   const ourValuesArray = [

@@ -7,8 +7,10 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { Plus, StepBackIcon } from "lucide-react";
 
+import { addDynamicRoutes } from '../../routes';
+
 import logo from "@/assets/company-logo.png";
-import { backButtonEnabledRoutes } from "../../routes";
+import { backButtonEnabledRoutes } from "../../routes"
 
 import ButtonWithIcon from "@/components/ui/button-icon";
 import {
@@ -26,12 +28,15 @@ const Navbar = () => {
   const pathname = usePathname();
   const [showbackArrow, setShowbackArrow] = useState<boolean>(false);
 
+
   useEffect(() => {
     const isBackButtonEnabledRoute = backButtonEnabledRoutes.some((path) =>
       pathname.includes(path),
-    );
+    );    
+    addDynamicRoutes(pathname)
     setShowbackArrow(isBackButtonEnabledRoute);
-  }, [pathname]);
+  }, [pathname]);  
+  
   return (
     <header className="shadow-sm">
       <nav className="m-auto flex max-w-5xl items-center justify-between px-3 py-5">
