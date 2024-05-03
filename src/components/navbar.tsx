@@ -5,12 +5,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-import { Plus, StepBackIcon } from "lucide-react";
+import { Plus, StepBackIcon, MenuIcon } from "lucide-react";
 
-import { addDynamicRoutes } from '../../routes';
+import { addDynamicRoutes, backButtonEnabledRoutes } from '../../routes';
 
 import logo from "@/assets/company-logo.png";
-import { backButtonEnabledRoutes } from "../../routes"
 
 import ButtonWithIcon from "@/components/ui/button-icon";
 import {
@@ -21,7 +20,7 @@ import {
   MenubarItem,
   MenubarSeparator,
 } from "@/components/ui/menubar";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+
 
 const Navbar = () => {
   const router = useRouter();
@@ -74,7 +73,7 @@ const Navbar = () => {
         <Menubar>
           <MenubarMenu>
             <MenubarTrigger>
-              <HamburgerMenuIcon className="size-4 hover:cursor-pointer" />
+              <MenuIcon className="size-4 hover:cursor-pointer" />
             </MenubarTrigger>
 
             <MenubarContent align="end">
