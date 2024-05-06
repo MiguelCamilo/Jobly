@@ -1,6 +1,8 @@
 import { twMerge } from "tailwind-merge"
 import { type ClassValue, clsx } from "clsx"
 
+import { User } from '@clerk/nextjs/server'
+import { UserResource } from "@clerk/types"
 import { formatDistanceToNowStrict } from "date-fns"
 
 export function cn(...inputs: ClassValue[]) {
@@ -36,4 +38,8 @@ export function createSlug(str: string) {
 export function isJobSlugRoute(url: string) {
   const regex = /^\/jobs\/[^\/]+$/; // regular expression to match /jobs/slug
   return regex.test(url);
+}
+
+export function isAdmin(user: UserResource | User) {
+  return user.publicMetadata?.role === "admin";
 }

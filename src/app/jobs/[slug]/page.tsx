@@ -1,12 +1,12 @@
 import { cache } from "react";
 import { Metadata } from "next";
 
-import findJob from "../../../../actions/find-job";
+import findJobBySlug from '../../../../actions/find-job';
+import findJobSlugs from '../../../../actions/find-job-slugs';
 
 import JobDetails from "@/components/job-details";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import findJobSlugs from '../../../../actions/find-job-slugs';
 
 interface PageProps {
   params: {
@@ -16,7 +16,7 @@ interface PageProps {
 
 const getCachedJob = cache(async (slug: string) => {
   // cached call since metadata and page have to request job data twice
-  return await findJob(slug);
+  return await findJobBySlug(slug);
 });
 
 // will cache slug pages for faster load times
