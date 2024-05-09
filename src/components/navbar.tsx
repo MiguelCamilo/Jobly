@@ -20,7 +20,9 @@ import {
   MenubarItem,
   MenubarSeparator,
 } from "@/components/ui/menubar";
-import { UserButton } from "@clerk/nextjs";
+
+
+import { SignInButton } from '@clerk/nextjs';
 
 const Navbar = () => {
   // const router = useRouter();
@@ -68,6 +70,8 @@ const Navbar = () => {
             <span className="text-xl font-bold tracking-tight">Jobly</span>
           </Link>
         )}
+
+        {/* <SignInButton /> */}
 
         <Menubar>
           <MenubarMenu>

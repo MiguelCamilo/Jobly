@@ -8,7 +8,7 @@ import { currentUser } from '@clerk/nextjs'
 
 type FormState = { error?: string } | undefined
 
-export async function approvedJobSubission(formData: FormData): Promise<FormState> {
+export async function approvedJobSubission(prevState: FormState, formData: FormData): Promise<FormState> {
     try {
         const jobId = parseInt(formData.get("jobId") as string)
 
@@ -22,7 +22,8 @@ export async function approvedJobSubission(formData: FormData): Promise<FormStat
                 id: jobId
             },
             data: {
-                approved: true
+                approved: true,
+                status: "APPROVED"
             }
         })
 

@@ -10,3 +10,9 @@ export enum JOB_TYPES_ENUM {
     PART_TIME = "Part Time",
     CONTRACT = "Contract",
 }
+
+export enum JOB_STATUS {
+    APPROVED = "Approved",
+    PENDING = "Pending",
+    DECLINDED = "Declined"
+}

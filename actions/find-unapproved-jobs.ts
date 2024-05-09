@@ -5,6 +5,7 @@ export default async function findUnapprovedJobs() {
     const unApprovedJobs = await prisma.job.findMany({
       where: {
         approved: false,
+        status: "PENDING"
       },
     });
 

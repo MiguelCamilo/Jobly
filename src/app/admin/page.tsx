@@ -17,8 +17,7 @@ export default async function AdminPortal() {
             Admin Dashboard
           </h1>
           <UserButton
-            showName
-            afterSignOutUrl="/"
+            showName            
             appearance={{
               elements: {
                 avatarBox: "border-2 border-blue-400 h-10 w-10",                
@@ -29,7 +28,7 @@ export default async function AdminPortal() {
       </div>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-bold">Unapproved Jobs</h2>
+        <h2 className="text-lg font-bold">Unapproved Jobs: {unApprovedJobs?.length}</h2>
         {unApprovedJobs?.map((job) => (
           <Link key={job?.id} href={`/admin/jobs/${job?.slug}`}>
             <JobListItem job={job} />

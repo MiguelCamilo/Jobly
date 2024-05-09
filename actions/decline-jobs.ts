@@ -10,10 +10,12 @@ import { currentUser } from "@clerk/nextjs";
 import prisma from "@/lib/prisma";
 import { isAdmin } from "@/lib/utils";
 
-
+0
 type FormState = { error?: string } | undefined;
 
-export async function deleteJobSubmission(
+// TODO: update from delete to decline
+export async function declineJobSubmission(
+  prevState: FormState, // passed to satisfy useFormState error
   formData: FormData,
 ): Promise<FormState> {
   try {
@@ -30,15 +32,25 @@ export async function deleteJobSubmission(
       },
     });
 
-    if (job?.companyLogoUrl) {
-        await del(job.companyLogoUrl)
-    }
+    await prisma.job.update({
+      where: {
+        id: jobId
+      },
+      data: {
+        status: "DECLINED",
+        approved: false,
+      }
+    })
 
-    await prisma.job.delete({
-        where: {
-          id: jobId,
-        },
-      });
+    // if (job?.companyLogoUrl) {
+    //     await del(job.companyLogoUrl)
+    // }
+
+    // await prisma.job.delete({
+    //     where: {
+    //       id: jobId,
+    //     },
+    //   });
 
       revalidatePath("/");
 
