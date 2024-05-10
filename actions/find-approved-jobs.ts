@@ -46,7 +46,7 @@ export default async function findApprovedJobs({
   };
 
 
-  const jobsPromise = await prisma.job.findMany({
+  const jobsPromise = prisma.job.findMany({
     where,
     orderBy: { createdAt: "desc" },
     take: jobsPerPage, // take: the amount of results we want to return
