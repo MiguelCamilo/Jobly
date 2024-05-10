@@ -71,8 +71,6 @@ const Navbar = () => {
           </Link>
         )}
 
-        {/* <SignInButton /> */}
-
         <Menubar>
           <MenubarMenu>
             <MenubarTrigger>
@@ -89,13 +87,6 @@ const Navbar = () => {
                   Post a Job
                 </Link>
               </MenubarItem>
-              {/* 
-              <MenubarItem
-                // onClick={() => router.push("/jobs/new")}
-                className="flex gap-2 hover:cursor-pointer"
-              >
-                <UserButton />
-              </MenubarItem> */}
             </MenubarContent>
           </MenubarMenu>
         </Menubar>

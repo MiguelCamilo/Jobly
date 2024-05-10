@@ -10,7 +10,7 @@ import { currentUser } from "@clerk/nextjs";
 import prisma from "@/lib/prisma";
 import { isAdmin } from "@/lib/utils";
 
-0
+
 type FormState = { error?: string } | undefined;
 
 // TODO: update from delete to decline
@@ -26,12 +26,6 @@ export async function declineJobSubmission(
       throw new Error("Not Authorized");
     }
 
-    const job = await prisma.job.findUnique({
-      where: {
-        id: jobId,
-      },
-    });
-
     await prisma.job.update({
       where: {
         id: jobId
@@ -42,20 +36,11 @@ export async function declineJobSubmission(
       }
     })
 
-    // if (job?.companyLogoUrl) {
-    //     await del(job.companyLogoUrl)
-    // }
-
-    // await prisma.job.delete({
-    //     where: {
-    //       id: jobId,
-    //     },
-    //   });
 
       revalidatePath("/");
 
   } catch (error) {
-    let message = "Unexpected error occured when deleting job.";
+    let message = "Unexpected error occured when declining this job.";
     if (error instanceof Error) {
       message = error.message;
     }
@@ -63,5 +48,5 @@ export async function declineJobSubmission(
     return { error: message };
   }
 
-  redirect("/admin"); // belongs outside of the try catch due to nextjs throwing an error when redirect is called
+  // redirect("/admin"); // belongs outside of the try catch due to nextjs throwing an error when redirect is called
 }

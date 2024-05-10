@@ -9,7 +9,7 @@ import { ClipLoader } from 'react-spinners';
 interface ILoadingButtonText {
     isPending?: boolean;
     className?: string;
-    children?: string;
+    children?: React.ReactNode;
 }
 
 const LoadingButtonText = ({ isPending, children, className }: ILoadingButtonText) => {
