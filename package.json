@@ -9,7 +9,8 @@
     "lint": "next lint",
     "prepare": "husky",
     "lint:staged": "lint-staged",
-    "seed": "node scripts/seed.js"
+    "seed": "node scripts/seed.js",
+    "postinstall": "prisma generate"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": "eslint"
