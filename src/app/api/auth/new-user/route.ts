@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { currentUser, auth } from "@clerk/nextjs";
 
-export default async function GET() {
+export async function get() {
   console.log('ATTEMPTING TO CREATE USER')
   const { userId } = auth();
 
