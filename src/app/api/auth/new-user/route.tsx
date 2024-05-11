@@ -3,8 +3,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { currentUser, auth } from "@clerk/nextjs";
 
-export async function get() {
-  console.log('ATTEMPTING TO CREATE USER')
+export async function GET() {
   const { userId } = auth();
 
   if (!userId) {
@@ -37,7 +36,16 @@ export async function get() {
     });
   }
 
-  console.log('CREATED USER / NOT')
+  if (!existingUserDB) {
+    return new NextResponse(null, {
+      status: 302,
+      headers: {
+        Location: "localhost:3000/api/auth/new-user"
+      }
+    })
+  }
+
+
 
   return new NextResponse(null, {
     status: 302, // 302 Found - temporary redirect
