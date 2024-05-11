@@ -1,13 +1,15 @@
-import { Metadata } from 'next'
+import { Metadata } from "next";
+
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
-    title: "Jobly Admin Portal"  
-}
+  title: "Jobly Admin Portal",
+};
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-    return (
-        <div className="min-w-[350px]">
-            {children}
-        </div>
-    )
+  return (
+    <ClerkProvider>
+      <div className="min-w-[350px]">{children}</div>
+    </ClerkProvider>
+  );
 }

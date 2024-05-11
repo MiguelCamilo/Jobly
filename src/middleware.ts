@@ -11,5 +11,5 @@ export default authMiddleware({
 
 export const config = {
   // protects all /admin routes with clerk middlware
-  matcher: ["/(admin)(.*)", '/api/((?!.+\\.[\\w]+$|_next).*)', '/((?!.+\\.[\\w]+$|_next).*)',],
+  matcher: ["/(admin)(.*)"],
 };
