@@ -50,7 +50,7 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
       query: defaultValues?.query || "",
       type: defaultValues?.type || "",
       location: defaultValues?.location || "",
-      remote: defaultValues?.remote, // TODO: fix: value is not being passed to the url params
+      remote: undefined,
     },
   });
 
@@ -174,7 +174,7 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
               />
             </div>
 
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <FormField
                 control={form.control}
                 name="remote"
@@ -193,7 +193,7 @@ const JobFilterSidebar = ({ defaultValues }: JobFilterSidebarProps) => {
                   </FormItem>
                 )}
               />
-            </div>
+            </div> */}
             <Button
               type="submit"
               variant={"default"}

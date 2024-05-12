@@ -19,7 +19,7 @@ export default async function filterJobs(values: z.infer<typeof JobFilterSchema>
         ...(query && { query: query.trim() }), // if query is defined then add it to the searchParams
         ...(type && { type }),
         ...(location && { location }),
-        ...(remote && { remote: "true" }), 
+        ...(remote && { remote: "true" }), // todo: remote boolean not adding to url
     });
 
     return redirect(`/?${searchParams.toString()}`)

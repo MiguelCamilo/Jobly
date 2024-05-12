@@ -16,6 +16,8 @@ export default function Markdown({ children }: MarkdownProps) {
             target="_blank"
           />
         ),
+        strong: (props) => <strong {...props} className="text-black" />,
+        p: (props) => <p {...props} className="text-muted-foreground" />
       }}
       className="space-y-3"
     >

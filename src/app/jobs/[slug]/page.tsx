@@ -50,7 +50,7 @@ export default async function Page({ params: { slug } }: PageProps) {
   }
 
   return (
-    <main className="m-auto my-10 flex max-w-[5xl] flex-col items-center gap-5 px-3 md:flex-row md:items-start">
+    <main className="m-auto my-10 flex max-w-5xl flex-col items-center gap-5 px-16 lg:px-3 md:flex-row md:items-start">
       <JobDetails job={job} />
       <aside className="flex w-full items-center justify-center">
         <Button asChild>

@@ -3,10 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+
+import { currentUser } from '@clerk/nextjs';
 
 import { Plus, StepBackIcon, MenuIcon } from "lucide-react";
 
+import { isAdmin } from "@/lib/utils";
 import { addDynamicRoutes, backButtonEnabledRoutes } from "../../routes";
 
 import logo from "@/assets/company-logo.png";
@@ -21,13 +24,10 @@ import {
   MenubarSeparator,
 } from "@/components/ui/menubar";
 
-
-import { SignInButton } from '@clerk/nextjs';
-
 const Navbar = () => {
-  // const router = useRouter();
-  const pathname = usePathname();
-  const [showbackArrow, setShowbackArrow] = useState<boolean>(false);
+  const router = useRouter();
+  const pathname = usePathname();  
+  const [showbackArrow, setShowbackArrow] = useState<boolean>(false);   
 
   useEffect(() => {
     const isBackButtonEnabledRoute = backButtonEnabledRoutes.some((path) =>
@@ -35,7 +35,7 @@ const Navbar = () => {
     );
     addDynamicRoutes(pathname);
     setShowbackArrow(isBackButtonEnabledRoute);
-  }, [pathname]);
+  }, [pathname, setShowbackArrow]);
 
   return (
     <header className="shadow-sm">
@@ -43,7 +43,7 @@ const Navbar = () => {
         <div className="flex items-center gap-3">
           {showbackArrow ? (
             <ButtonWithIcon
-              // onClick={() => router.back()}
+              onClick={() => router.push("/")}
               variants="outline"
               icon={StepBackIcon}
             >
@@ -79,14 +79,22 @@ const Navbar = () => {
 
             <MenubarContent align="end">
               <MenubarItem
-                // onClick={() => router.push("/jobs/new")}
-                className="flex gap-2 hover:cursor-pointer"
+                onClick={() => router.push("/jobs/new")}
+                className="flex w-full justify-center gap-2 hover:cursor-pointer"
               >
-                <Link href="/jobs/new" className="flex items-center gap-1 flex-row">
+                <Plus className="size-4" />
+                Post a Job
+              </MenubarItem>
+
+              {/* {isAdminUser && (
+                <MenubarItem
+                  onClick={() => router.push("/jobs/new")}
+                  className="flex w-full justify-center gap-2 hover:cursor-pointer"
+                >
                   <Plus className="size-4" />
                   Post a Job
-                </Link>
-              </MenubarItem>
+                </MenubarItem>
+              )} */}
             </MenubarContent>
           </MenubarMenu>
         </Menubar>
