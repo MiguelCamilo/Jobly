@@ -6,14 +6,14 @@ const Footer = () => {
       href: "/about",
       label: "About Jobly",
     },
-    {
-      href: "/terms",
-      label: "Terms of Service",
-    },
-    {
-      href: "/privacy",
-      label: "Privacy Policy",
-    },
+    // {
+    //   href: "/terms",
+    //   label: "Terms of Service",
+    // },
+    // {
+    //   href: "/privacy",
+    //   label: "Privacy Policy",
+    // },
   ];
   return (
     <footer className="border-t">

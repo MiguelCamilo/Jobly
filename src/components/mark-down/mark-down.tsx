@@ -8,7 +8,7 @@ export default function Markdown({ children }: MarkdownProps) {
   return (
     <ReactMarkdown
       components={{
-        ul: (props) => <ul {...props} className="list-inside list-disc" />,
+        ul: (props) => <ul {...props} className="list-inside list-disc text-muted-foreground" />,
         a: (props) => (
           <a
             {...props}
