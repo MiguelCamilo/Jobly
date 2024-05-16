@@ -20,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useToast } from '@/components/ui/use-toast';
 import Markdown from "@/components/mark-down/mark-down";
+import { useEffect, useState } from 'react';
 
 interface JobDetailsProps {
   job: Job;
@@ -45,9 +46,15 @@ const JobDetails = ({
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const createUrlLink = () => {
+  const [urlPathname, setUrlPathname] = useState<string>()
+
+  useEffect(() => {
     const url = `${window.location.origin}${pathname}?${searchParams}`
-    navigator.clipboard.writeText(url)
+    setUrlPathname(url)
+  }, [pathname, searchParams])
+
+  const createUrlLink = (url: string | undefined) => {    
+    navigator.clipboard.writeText(url ?? "")
 
     toast({
       title: "Job copied to clipboard",
@@ -72,7 +79,7 @@ const JobDetails = ({
             <a href={applicationLink}>Apply Now</a>
           </Button>
 
-          <Button onClick={createUrlLink} variant="secondary" className="hidden w-10 sm:flex delay-100 hover:bg-primary/20">
+          <Button onClick={() => { createUrlLink(urlPathname) }} variant="secondary" className="hidden w-10 sm:flex delay-100 hover:bg-primary/20">
             <span>
               <LinkIcon size={20} />
             </span>
