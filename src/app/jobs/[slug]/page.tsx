@@ -38,8 +38,7 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { slug } }: PageProps) {
-  const job = await getCachedJob(slug);
-  const approvedJobs = await findApprovedJobs({});
+  const job = await getCachedJob(slug);  
 
   const { applicationEmail, applicationUrl } = job;
 

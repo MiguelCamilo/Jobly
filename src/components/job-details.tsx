@@ -45,20 +45,20 @@ const JobDetails = ({
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  // const createUrlLink = () => {
-  //   const url = `${window.location.origin}${pathname}?${searchParams}`
-  //   navigator.clipboard.writeText(url)
+  const createUrlLink = () => {
+    const url = `${window.location.origin}${pathname}?${searchParams}`
+    navigator.clipboard.writeText(url)
 
-  //   toast({
-  //     title: "Job copied to clipboard",
-  //     description: "Feel free to share this job!",
-  //     style: {
-  //       color: "white",
-  //       backgroundColor: "green"        
-  //     }
+    toast({
+      title: "Job copied to clipboard",
+      description: "Feel free to share this job!",
+      style: {
+        color: "white",
+        backgroundColor: "green"        
+      }
       
-  //   })
-  // }
+    })
+  }
   
   return (
     <section className="w-full grow space-y-5">
@@ -72,11 +72,11 @@ const JobDetails = ({
             <a href={applicationLink}>Apply Now</a>
           </Button>
 
-          {/* <Button onClick={createUrlLink} variant="secondary" className="hidden w-10 sm:flex delay-100 hover:bg-primary/20">
+          <Button onClick={createUrlLink} variant="secondary" className="hidden w-10 sm:flex delay-100 hover:bg-primary/20">
             <span>
               <LinkIcon size={20} />
             </span>
-          </Button> */}
+          </Button>
         </div>
       </div>
 
