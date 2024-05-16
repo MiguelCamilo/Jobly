@@ -53,15 +53,8 @@ export default async function Page({ params: { slug } }: PageProps) {
   }
 
   return (
-    <main className="m-auto my-10 flex max-w-7xl flex-col items-center gap-5 px-10 md:flex-row md:items-start lg:px-3">
+    <main className="m-auto my-10 flex max-w-5xl flex-col items-center gap-5 px-10 md:flex-row md:items-start lg:px-3">
       <JobDetails job={job} applicationLink={applicationLink} />
-      <aside className="flex w-1/2 flex-col items-center justify-center">
-        {approvedJobs?.jobs.map((job) => (
-          <Link key={job?.id} href={`/jobs/${job?.slug}`} className="block">
-            {/* <JobListItem job={job} /> */}
-          </Link>
-        ))}
-      </aside>
     </main>
   );
 }

@@ -51,7 +51,12 @@ const JobDetails = ({
 
     toast({
       title: "Job copied to clipboard",
-      description: "Feel free to share this job!"
+      description: "Feel free to share this job!",
+      style: {
+        color: "white",
+        backgroundColor: "green"        
+      }
+      
     })
   }
   
@@ -63,7 +68,7 @@ const JobDetails = ({
         </h1>
 
         <div className="flex justify-end gap-2">
-          <Button className="hidden w-full sm:block md:w-full">
+          <Button className="hidden w-full sm:block md:w-full bg-blue-500 hover:bg-blue-600">
             <a href={applicationLink}>Apply Now</a>
           </Button>
 
