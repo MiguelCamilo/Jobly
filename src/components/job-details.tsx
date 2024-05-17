@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 import { Job } from "@prisma/client";
@@ -20,7 +21,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useToast } from '@/components/ui/use-toast';
 import Markdown from "@/components/mark-down/mark-down";
-import { useEffect, useState } from 'react';
 
 interface JobDetailsProps {
   job: Job;
