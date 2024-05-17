@@ -15,8 +15,15 @@ Features:
 
 
 ## Screenshots
+Admin Dashboard:
+![Screenshot 2024-05-17 at 12 40 54 AM](https://github.com/MiguelCamilo/Jobly/assets/52728963/fbd0ffbb-3baa-4ce6-91ff-04867379a124)
+Home Page:
+![Home Page](https://github.com/MiguelCamilo/Jobly/assets/52728963/6cceb79d-4add-47e7-8d9d-9fbc6d2d452d)
+Filtered Job Results:
+![Filter Job Result](https://github.com/MiguelCamilo/Jobly/assets/52728963/6f0f6ded-7a43-408a-ad0e-27fecf426430)
+Job Submitted UI:
+![Screenshot 2024-05-17 at 12 40 17 AM](https://github.com/MiguelCamilo/Jobly/assets/52728963/2230c989-3984-4fd7-9e46-c23027d9a02a)
 
-![]()
 
 
 ## Tech Stack
