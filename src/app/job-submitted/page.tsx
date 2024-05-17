@@ -1,7 +1,7 @@
 "use client"
 import { useRouter } from 'next/navigation';
 
-import { CircleCheckBig, History, Plus } from "lucide-react";
+import { BriefcaseBusiness, CircleCheckBig, Plus } from "lucide-react";
 
 import ButtonWithIcon from '@/components/ui/button-icon';
 
@@ -21,8 +21,8 @@ export default function JobSubmittedPage() {
         <ButtonWithIcon icon={Plus} variants="default" onClick={() => router.replace("/jobs/new")}>
           Post Another Job
         </ButtonWithIcon>
-        <ButtonWithIcon icon={History} variants="outline">
-          View Pending Jobs
+        <ButtonWithIcon icon={BriefcaseBusiness} variants="outline" onClick={() => router.replace("/")}>
+          View Other Jobs
         </ButtonWithIcon>
       </div>
     </main>

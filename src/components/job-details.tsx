@@ -1,9 +1,9 @@
-"use client" 
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 
 import { Job } from "@prisma/client";
 import { relativeDate, formatCurrency } from "@/lib/utils";
@@ -14,12 +14,12 @@ import {
   Clock,
   Globe2,
   MapPin,
-  Link as LinkIcon
+  Link as LinkIcon,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from "@/components/ui/use-toast";
 import Markdown from "@/components/mark-down/mark-down";
 
 interface JobDetailsProps {
@@ -42,31 +42,30 @@ const JobDetails = ({
   },
   applicationLink,
 }: JobDetailsProps) => {
-  const { toast } = useToast()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+  const { toast } = useToast();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const [urlPathname, setUrlPathname] = useState<string>()
+  const [urlPathname, setUrlPathname] = useState<string>();
 
   useEffect(() => {
-    const url = `${window.location.origin}${pathname}?${searchParams}`
-    setUrlPathname(url)
-  }, [pathname, searchParams])
+    const url = `${window.location.origin}${pathname}?${searchParams}`;
+    setUrlPathname(url);
+  }, [pathname, searchParams]);
 
-  const createUrlLink = (url: string | undefined) => {    
-    navigator.clipboard.writeText(url ?? "")
+  const createUrlLink = (url: string | undefined) => {
+    navigator.clipboard.writeText(url ?? "");
 
     toast({
       title: "Job copied to clipboard",
       description: "Feel free to share this job!",
       style: {
         color: "white",
-        backgroundColor: "green"        
-      }
-      
-    })
-  }
-  
+        backgroundColor: "#3b82f6",
+      },
+    });
+  };
+
   return (
     <section className="w-full grow space-y-5">
       <div className="flex w-full items-center justify-between">
@@ -75,11 +74,17 @@ const JobDetails = ({
         </h1>
 
         <div className="flex justify-end gap-2">
-          <Button className="hidden w-full sm:block md:w-full bg-blue-500 hover:bg-blue-600">
+          <Button className="hidden w-full bg-blue-500 hover:bg-blue-600 sm:block md:w-full">
             <a href={applicationLink}>Apply Now</a>
           </Button>
 
-          <Button onClick={() => { createUrlLink(urlPathname) }} variant="secondary" className="hidden w-10 sm:flex delay-100 hover:bg-primary/20">
+          <Button
+            onClick={() => {
+              createUrlLink(urlPathname);
+            }}
+            variant="secondary"
+            className="hidden w-10 delay-100 hover:bg-primary/20 sm:flex"
+          >
             <span>
               <LinkIcon size={20} />
             </span>
@@ -101,7 +106,7 @@ const JobDetails = ({
           <div className="flex flex-col space-y-2">
             <div>
               {applicationUrl ? (
-                <div className="flex flex-col gap-4 sm:flex-row">
+                <div className="flex flex-row gap-4 sm:flex-col">
                   <Link
                     href={new URL(applicationUrl).origin}
                     target="_blank"
@@ -110,7 +115,7 @@ const JobDetails = ({
                     {companyName}
                   </Link>
                   {!location ? null : (
-                    <p className="flex items-center gap-1.5 ">
+                    <p className="flex items-center gap-1.5 text-sm">
                       <Globe2 size={16} className="shrink-0" />
                       {location}
                     </p>
@@ -152,9 +157,28 @@ const JobDetails = ({
         {/* description is optional */}
         {description && <Markdown>{description}</Markdown>}
       </div>
-      <Button asChild className="flex w-full sm:hidden md:w-1/5">
-        <a href={applicationLink}>Apply Now</a>
-      </Button>
+
+      <div className="flex flex-row justify-between gap-2">
+        <Button
+          asChild
+          className="flex w-full bg-blue-500 hover:bg-blue-600 sm:hidden md:w-1/5"
+        >
+          <a href={applicationLink}>Apply Now</a>
+        </Button>
+
+        
+        <Button
+          onClick={() => {
+            createUrlLink(urlPathname);
+          }}
+          variant="secondary"
+          className="flex w-10 delay-100 hover:bg-primary/20 sm:hidden"
+        >
+          <span>
+            <LinkIcon size={20} />
+          </span>
+        </Button>
+      </div>
     </section>
   );
 };
