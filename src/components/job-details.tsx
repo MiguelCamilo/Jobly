@@ -100,7 +100,7 @@ const JobDetails = ({
               alt="Company Logo"
               width={100}
               height={100}
-              className="hidden rounded-xl md:flex"
+              className="rounded-xl hidden md:flex"
             />
           )}
           <div className="flex flex-col space-y-2">
